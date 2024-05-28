@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perhitungan Total Makanan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Perhitungan Total Makanan</h1>
+        <table id="foodTable">
+            <thead>
+                <tr>
+                    <th>Nama Makanan</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- Mengubah input nama makanan menjadi checkbox button -->
+                    <td>
+                        <input type="checkbox" name="foodName" class="foodName" value="mie baso"> Mie Baso<br>
+                        <input type="checkbox" name="foodName" class="foodName" value="sate padang"> Sate Padang<br>
+                        <input type="checkbox" name="foodName" class="foodName" value="mie ayam"> Mie ayam<br>
+                        <input type="checkbox" name="foodName" class="foodName" value="Mie Ayam Baso">mie ayam baso<br>
+                        <!-- Anda dapat menambahkan opsi makanan lain di sini -->
+                    </td>
+                    <!-- ------------------------------------------ -->
+                    <td><input type="number" class="foodPrice"></td>
+                    <td><input type="number" class="foodQuantity"></td>
+                    <td><input type="text" class="totalPrice" readonly></td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="hitungTotal()">Hitung Total</button>
+        <button onclick="resetForm()">Reset</button>
+        <div id="result"></div>
+        <!-- Tambahkan tabel transaksi di bawah -->
+        <h2>Transaksi</h2>
+        <table id="transactionTable">
+            <thead>
+                <tr>
+                    <th>Nama Makanan</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total Harga</th>
+                </tr>
+            </thead>
+            <tbody id="transactionBody">
+                
+            </tbody>
+        </table>
+        <!-- ------------------------------------ -->
+    </div>
+
+    <script>
+        function hitungTotal() {
+    var foodRows = document.querySelectorAll('#foodTable tbody tr');
+    var totalHarga = 0;
+    var transactionBody = document.getElementById("transactionBody");
+
+    foodRows.forEach(function(row) {
+        if (row.querySelector('.foodName:checked')) {
+            var foodName = row.querySelector('.foodName:checked').value;
+            var foodPrice = parseFloat(row.querySelector('.foodPrice').value) || 0;
+            var foodQuantity = parseInt(row.querySelector('.foodQuantity').value) || 0;
+            var totalPrice = foodPrice * foodQuantity;
+
+            // Menambahkan data transaksi ke dalam tabel
+            var transactionRow = document.createElement("tr");
+            transactionRow.innerHTML = "<td>" + foodName + "</td>" +
+                                       "<td>Rp. " + foodPrice + "</td>" + // Menambahkan "Rp."
+                                       "<td>" + foodQuantity + "</td>" +
+                                       "<td>Rp. " + totalPrice + "</td>"; // Menambahkan "Rp."
+            transactionBody.appendChild(transactionRow);
+
+            totalHarga += totalPrice;
+        }
+    });
+
+    document.getElementById("result").innerHTML = "Total harga makanan adalah: Rp. " + totalHarga; // Menambahkan "Rp."
+}
+
+function resetForm() {
+    var foodRows = document.querySelectorAll('#foodTable tbody tr');
+    foodRows.forEach(function(row) {
+        var checkbox = row.querySelector('.foodName:checked');
+        if (checkbox) {
+            checkbox.checked = false;
+        }
+        row.querySelector('.foodPrice').value = '';
+        row.querySelector('.foodQuantity').value = '';
+        row.querySelector('.totalPrice').value = '';
+    });
+    document.getElementById("result").innerHTML = "";
+}
+    </script>
+</body>
+</html>
